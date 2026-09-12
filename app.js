@@ -13,7 +13,6 @@ app.get('/', (req, res) => {
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>اختبار توقعات الزواج - اكتشف مستقبلك</title>
             
-            <!-- Open Graph tags for Social Media Sharing -->
             <meta property="og:title" content="اختبار توقعات الزواج - اكتشف متى ستتزوج؟">
             <meta property="og:description" content="أجب عن الأسئلة واكتشف متى وكيف ستتزوج وما هي صفات شريك حياتك القادم! جربها الآن وتحدى أصدقاءك.">
             <meta property="og:image" content="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=1200">
@@ -48,7 +47,7 @@ app.post('/result', (req, res) => {
     ];
     
     const randomResult = results[Math.floor(Math.random() * results.length)];
-    const shareText = encodeURIComponent(`اختبار توقعات الزواج الخاص بي: "${randomResult.title}" - جرب الاختبار أنت أيضاً!`);
+    const shareText = encodeURIComponent(`نتيجة اختبار الزواج الخاصة بي: "${randomResult.title}" - جرب الاختبار أنت أيضاً!`);
     const shareUrl = encodeURIComponent("https://express-hello-world-hfcr.onrender.com");
 
     res.send(`
@@ -59,14 +58,12 @@ app.post('/result', (req, res) => {
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>نتيجة اختبار الزواج</title>
             
-            <!-- Open Graph tags for Result Sharing -->
             <meta property="og:title" content="نتيجة اختبار الزواج: ${randomResult.title}">
-            <meta property="og:description" content="لقد أجريت اختبار توقعات الزواج وهذه هي نتيجتي! انقر هنا لتكتشف نتيجتك أنت أيضاً.">
+            <meta property="og:description" content="لقد أجريت الاختبار وهذه هي نتيجتي! انقر هنا لتكتشف نتيجتك أنت أيضاً.">
             <meta property="og:image" content="${randomResult.image}">
             <meta property="og:url" content="https://express-hello-world-hfcr.onrender.com">
             <meta property="og:type" content="website">
 
-            <!-- استدعاء مكتبة الأيقونات الحقيقية FontAwesome -->
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
             <style>
                 body { font-family: Tahoma, sans-serif; background: #fdfbf7; text-align: center; padding: 20px; margin: 0; }
@@ -101,7 +98,7 @@ app.post('/result', (req, res) => {
                 
                 <div class="social-icons">
                     <a class="social-icon whatsapp" href="https://api.whatsapp.com/send?text=${shareText}%20${shareUrl}" target="_blank" title="واتساب"><i class="fab fa-whatsapp"></i></a>
-                    <a class="social-icon facebook" href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}" target="_blank" title="فيسبوك"><i class="fab fa-facebook-f"></i></a>
+                    <a class="social-icon facebook" href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}&quote=${shareText}" target="_blank" title="فيسبوك"><i class="fab fa-facebook-f"></i></a>
                     <a class="social-icon twitter" href="https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}" target="_blank" title="إكس"><i class="fab fa-x-twitter"></i></a>
                     <a class="social-icon instagram" href="https://www.instagram.com/" target="_blank" title="إنستجرام"><i class="fab fa-instagram"></i></a>
                     <a class="social-icon tiktok" href="https://www.tiktok.com/" target="_blank" title="تيك توك"><i class="fab fa-tiktok"></i></a>
