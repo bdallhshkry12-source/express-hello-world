@@ -16,10 +16,13 @@
             color: #fff;
             font-family: 'Cairo', Tahoma, sans-serif;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
         }
         #quiz-box {
             background: #191724;
@@ -30,6 +33,23 @@
             width: 90%;
             max-width: 400px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            margin-bottom: 30px;
+        }
+        .article-box {
+            background: rgba(25, 23, 36, 0.85);
+            padding: 20px;
+            border-radius: 12px;
+            max-width: 600px;
+            width: 100%;
+            line-height: 1.7;
+            font-size: 14px;
+            color: #ccc;
+            border: 1px solid rgba(255, 65, 108, 0.3);
+        }
+        .article-box h3 {
+            color: #ff416c;
+            margin-top: 0;
+            font-size: 18px;
         }
         button {
             transition: 0.2s;
@@ -56,10 +76,14 @@
     </div>
 
     <div id="result-screen" style="display: none;">
-        <h2 style="color: #ff416c; margin-bottom: 10px;">النتيجة السرية لك</h2>
-        <div id="result-text" style="background: #26233a; border: 2px dashed #ff416c; padding: 15px; border-radius: 10px; color: #ffb86c; font-size: 15px; font-weight: bold; margin-bottom: 15px; line-height: 1.6;"></div>
+        <h2 style="color: #ff416c; margin-bottom: 10px;">نتيجة اختبارك السري</h2>
         
-        <p style="font-size: 13px; color: #ddd; margin-bottom: 15px;">شارك النتيجة مع أصدقائك وتحدى الجميع</p>
+        <!-- مكان ظهور النتيجة كصورة فخمة -->
+        <div id="result-image-container" style="margin-bottom: 15px;">
+            <canvas id="resultCanvas" width="350" height="200" style="width: 100%; border-radius: 10px; border: 2px solid #ff416c; box-shadow: 0 5px 15px rgba(0,0,0,0.3);"></canvas>
+        </div>
+        
+        <p style="font-size: 13px; color: #ddd; margin-bottom: 15px;">شارك صورتك مع أصدقائك وتحدى الجميع</p>
         
         <div style="margin-bottom: 15px;">
             <button onclick="shareOnFacebook()" style="background: #1877f2; color: white; border: none; padding: 10px 15px; border-radius: 8px; font-weight: bold; width: 100%; margin-bottom: 8px;">مشاركة فيسبوك 💙</button>
@@ -68,6 +92,11 @@
 
         <button onclick="restartQuiz()" style="background: #333; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; width: 100%;">🔄 إعادة الاختبار</button>
     </div>
+</div>
+
+<div class="article-box">
+    <h3>كيف تعرف أن هناك شخصاً يراقبك في الخفاء؟</h3>
+    <p>الكثير منا يشعر أحياناً بوجود طاقة أو نظرات خفية تلاحقه في كل مكان، وغالباً ما يكون خلف هذه النظرات معجب سري يخشى الإفصاح عن مشاعره المخبأة. تدل لغة الجسد أحياناً والتصرفات غير العفوية على وجود اهتمام بالغ تفاصيل حياتك اليومية. من خلال هذا الاختبار الممتع والسريع، يمكنك التقاط بعض الإشارات النفسية ومعرفة نوعية الشخص الذي يهتم لأمرك بصمت تام بعيداً عن الأضواء.</p>
 </div>
 
 <script>
@@ -123,7 +152,53 @@
         document.getElementById('quiz-screen').style.display = 'none';
         document.getElementById('result-screen').style.display = 'block';
         finalResultText = results[Math.floor(Math.random() * results.length)];
-        document.getElementById('result-text').innerText = finalResultText;
+        
+        // رسم النتيجة داخل صورة (Canvas)
+        drawResultImage(finalResultText);
+    }
+
+    function drawResultImage(text) {
+        const canvas = document.getElementById('resultCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // خلفية الصورة
+        ctx.fillStyle = '#1e1c2e';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // إطار داخلي
+        ctx.strokeStyle = '#ff416c';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(10, 10, canvas.width - 20, canvas.height - 20);
+
+        // عنوان داخل الصورة
+        ctx.fillStyle = '#ff416c';
+        ctx.font = 'bold 16px Cairo, Tahoma, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('نتيجة اختبار المعجب السري', canvas.width / 2, 40);
+
+        // نص النتيجة (تقسيم الأسطر تلقائياً)
+        ctx.fillStyle = '#ffb86c';
+        ctx.font = '13px Cairo, Tahoma, sans-serif';
+        wrapText(ctx, text, canvas.width / 2, 75, canvas.width - 50, 20);
+    }
+
+    function wrapText(context, text, x, y, maxWidth, lineHeight) {
+        const words = text.split(' ');
+        let line = '';
+
+        for(let n = 0; n < words.length; n++) {
+            let testLine = line + words[n] + ' ';
+            let metrics = context.measureText(testLine);
+            let testWidth = metrics.width;
+            if (testWidth > maxWidth && n > 0) {
+                context.fillText(line, x, y);
+                line = words[n] + ' ';
+                y += lineHeight;
+            } else {
+                line = testLine;
+            }
+        }
+        context.fillText(line, x, y);
     }
 
     function shareOnFacebook() {
@@ -144,5 +219,5 @@
 </script>
 
 </body>
-                                                                                                              </html>
+    </html>
     
