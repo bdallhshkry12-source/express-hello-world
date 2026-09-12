@@ -54,30 +54,33 @@ app.post('/result', (req, res) => {
                 body { font-family: Tahoma, sans-serif; background: #fdfbf7; text-align: center; padding: 20px; margin: 0; }
                 .card { background: white; max-width: 500px; margin: auto; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
                 img { max-width: 100%; border-radius: 10px; margin-top: 10px; }
-                .btn { display: block; text-decoration: none; padding: 10px; font-size: 14px; border-radius: 8px; margin-top: 8px; color: white; font-weight: bold; }
+                .btn { display: block; text-decoration: none; padding: 12px; font-size: 15px; border-radius: 8px; margin-top: 10px; color: white; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+                .retry { background: #ff4757; font-size: 16px; margin-top: 15px; }
+                .retry:hover { background: #ff6b81; }
                 .whatsapp { background: #25D366; }
                 .facebook { background: #1877F2; }
                 .twitter { background: #000000; }
                 .instagram { background: #E1306C; }
                 .tiktok { background: #fe2c55; }
-                .retry { background: #ff4757; margin-top: 15px; }
+                .share-title { font-size: 14px; margin: 20px 0 10px 0; color: #555; font-weight: bold; border-top: 1px solid #eee; padding-top: 15px; }
             </style>
         </head>
         <body>
             <div class="card">
-                <h3 style="margin-top:0;">🎉 النتيجة الخاصة بك:</h3>
-                <p style="font-size: 16px; font-weight: bold; color: #333;">${randomResult.title}</p>
+                <h3 style="margin-top:0; color: #333;">🎉 النتيجة الخاصة بك:</h3>
+                <p style="font-size: 17px; font-weight: bold; color: #222;">${randomResult.title}</p>
                 <img src="${randomResult.image}" alt="نتيجة الزواج">
                 
-                <p style="font-size: 14px; margin: 15px 0 5px 0; color: #666;">شارك نتيجتك مع أصدقائك وتحدى الجميع:</p>
+                <!-- زر إعادة الاختبار في البداية وبارز -->
+                <a class="btn retry" href="/">🔄 إعادة الاختبار من جديد</a>
+                
+                <div class="share-title">شارك نتيجتك مع أصدقائك وتحدى الجميع:</div>
                 
                 <a class="btn whatsapp" href="https://api.whatsapp.com/send?text=${shareText}%20${shareUrl}" target="_blank">💬 مشاركة على واتساب</a>
                 <a class="btn facebook" href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}" target="_blank">📘 مشاركة على فيسبوك</a>
                 <a class="btn twitter" href="https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}" target="_blank">🅧 مشاركة على إكس (تويتر)</a>
                 <a class="btn instagram" href="https://www.instagram.com/" target="_blank">📸 مشاركة على إنستجرام</a>
                 <a class="btn tiktok" href="https://www.tiktok.com/" target="_blank">🎵 مشاركة على تيك توك</a>
-                
-                <a class="btn retry" href="/">إعادة الاختبار 🔄</a>
             </div>
         </body>
         </html>
