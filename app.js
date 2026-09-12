@@ -47,7 +47,8 @@ app.post('/result', (req, res) => {
     ];
     
     const randomResult = results[Math.floor(Math.random() * results.length)];
-    const shareText = encodeURIComponent(`نتيجة اختبار الزواج الخاصة بي: "${randomResult.title}" - جرب الاختبار أنت أيضاً!`);
+    const shareText = `نتيجة اختبار الزواج الخاصة بي: "${randomResult.title}" - جرب الاختبار أنت أيضاً عبر الرابط: https://express-hello-world-hfcr.onrender.com`;
+    const encodedShareText = encodeURIComponent(shareText);
     const shareUrl = encodeURIComponent("https://express-hello-world-hfcr.onrender.com");
 
     res.send(`
@@ -70,10 +71,13 @@ app.post('/result', (req, res) => {
                 .card { background: white; max-width: 500px; margin: auto; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
                 img { max-width: 100%; border-radius: 10px; margin-top: 10px; }
                 
-                .retry-btn { display: block; width: 100%; background: #ff4757; color: white; text-decoration: none; padding: 12px; font-size: 16px; border-radius: 8px; margin-top: 15px; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.1); box-sizing: border-box; }
+                .retry-btn { display: block; width: 100%; background: #ff4757; color: white; text-decoration: none; padding: 12px; font-size: 16px; border-radius: 8px; margin-top: 15px; font-weight: bold; box-sizing: border-box; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
                 .retry-btn:hover { background: #ff6b81; }
 
-                .share-title { font-size: 14px; margin: 20px 0 10px 0; color: #555; font-weight: bold; border-top: 1px solid #eee; padding-top: 15px; }
+                .copy-btn { display: block; width: 100%; background: #2ed573; color: white; border: none; padding: 10px; font-size: 15px; border-radius: 8px; margin-top: 10px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+                .copy-btn:hover { background: #26af5f; }
+
+                .share-title { font-size: 14px; margin: 15px 0 10px 0; color: #555; font-weight: bold; border-top: 1px solid #eee; padding-top: 15px; }
                 
                 .social-icons { display: flex; justify-content: center; gap: 12px; margin-top: 10px; flex-wrap: wrap; }
                 .social-icon { display: flex; align-items: center; justify-content: center; width: 45px; height: 45px; border-radius: 50%; color: white; text-decoration: none; font-size: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.15); transition: transform 0.2s; }
@@ -84,26 +88,42 @@ app.post('/result', (req, res) => {
                 .twitter { background: #000000; }
                 .instagram { background: #E1306C; }
                 .tiktok { background: #fe2c55; }
+                
+                .toast { display: none; background: #333; color: #fff; padding: 8px 15px; border-radius: 5px; font-size: 13px; margin-top: 10px; }
             </style>
         </head>
         <body>
             <div class="card">
                 <h3 style="margin-top:0; color: #333;">🎉 النتيجة الخاصة بك:</h3>
-                <p style="font-size: 17px; font-weight: bold; color: #222;">${randomResult.title}</p>
+                <p style="font-size: 17px; font-weight: bold; color: #222;" id="result-text">${randomResult.title}</p>
                 <img src="${randomResult.image}" alt="نتيجة الزواج">
+                
+                <button class="copy-btn" onclick="copyResult()"><i class="fa-solid fa-copy"></i> نسخ النتيجة لمشاركتها</button>
+                <div id="toast" class="toast">تم نسخ النتيجة والرابط بنجاح! الصقها في فيسبوك</div>
                 
                 <a class="retry-btn" href="/">🔄 إعادة الاختبار من جديد</a>
                 
                 <div class="share-title">شارك نتيجتك مع أصدقائك عبر:</div>
                 
                 <div class="social-icons">
-                    <a class="social-icon whatsapp" href="https://api.whatsapp.com/send?text=${shareText}%20${shareUrl}" target="_blank" title="واتساب"><i class="fab fa-whatsapp"></i></a>
-                    <a class="social-icon facebook" href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}&quote=${shareText}" target="_blank" title="فيسبوك"><i class="fab fa-facebook-f"></i></a>
-                    <a class="social-icon twitter" href="https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}" target="_blank" title="إكس"><i class="fab fa-x-twitter"></i></a>
+                    <a class="social-icon whatsapp" href="https://api.whatsapp.com/send?text=${encodedShareText}" target="_blank" title="واتساب"><i class="fab fa-whatsapp"></i></a>
+                    <a class="social-icon facebook" href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}" target="_blank" title="فيسبوك"><i class="fab fa-facebook-f"></i></a>
+                    <a class="social-icon twitter" href="https://twitter.com/intent/tweet?text=${encodedShareText}" target="_blank" title="إكس"><i class="fab fa-x-twitter"></i></a>
                     <a class="social-icon instagram" href="https://www.instagram.com/" target="_blank" title="إنستجرام"><i class="fab fa-instagram"></i></a>
                     <a class="social-icon tiktok" href="https://www.tiktok.com/" target="_blank" title="تيك توك"><i class="fab fa-tiktok"></i></a>
                 </div>
             </div>
+
+            <script>
+                function copyResult() {
+                    const textToCopy = "نتيجة اختبار الزواج: " + document.getElementById("result-text").innerText + " \\nجرب الاختبار أنت أيضاً: https://express-hello-world-hfcr.onrender.com";
+                    navigator.clipboard.writeText(textToCopy).then(() => {
+                        const toast = document.getElementById("toast");
+                        toast.style.display = "block";
+                        setTimeout(() => { toast.style.display = "none"; }, 3000);
+                    });
+                }
+            </script>
         </body>
         </html>
     `);
