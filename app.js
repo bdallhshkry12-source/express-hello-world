@@ -11,7 +11,15 @@ app.get('/', (req, res) => {
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>اختبار توقعات الزواج</title>
+            <title>اختبار توقعات الزواج - اكتشف مستقبلك</title>
+            
+            <!-- Open Graph tags for Social Media Sharing -->
+            <meta property="og:title" content="اختبار توقعات الزواج - اكتشف متى ستتزوج؟">
+            <meta property="og:description" content="أجب عن الأسئلة واكتشف متى وكيف ستتزوج وما هي صفات شريك حياتك القادم! جربها الآن وتحدى أصدقاءك.">
+            <meta property="og:image" content="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=1200">
+            <meta property="og:url" content="https://express-hello-world-hfcr.onrender.com">
+            <meta property="og:type" content="website">
+
             <style>
                 body { font-family: Tahoma, sans-serif; background: #fdfbf7; text-align: center; padding: 30px; margin: 0; }
                 .card { background: white; max-width: 500px; margin: auto; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
@@ -50,6 +58,14 @@ app.post('/result', (req, res) => {
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>نتيجة اختبار الزواج</title>
+            
+            <!-- Open Graph tags for Result Sharing -->
+            <meta property="og:title" content="نتيجة اختبار الزواج: ${randomResult.title}">
+            <meta property="og:description" content="لقد أجريت اختبار توقعات الزواج وهذه هي نتيجتي! انقر هنا لتكتشف نتيجتك أنت أيضاً.">
+            <meta property="og:image" content="${randomResult.image}">
+            <meta property="og:url" content="https://express-hello-world-hfcr.onrender.com">
+            <meta property="og:type" content="website">
+
             <!-- استدعاء مكتبة الأيقونات الحقيقية FontAwesome -->
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
             <style>
