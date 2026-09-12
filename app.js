@@ -1,61 +1,61 @@
-const express = require("express");
+const express = require('express');
 const app = express();
-const port = process.env.PORT || 3001;
 
-app.get("/", (req, res) => res.type('html').send(html));
+// الصفحة الرئيسية
+app.get('/', (req, res) => {
+    res.send('Marriage Quiz Dynamic Image Server is Running!');
+});
 
-const server = app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+// مسار مشاركة فيسبوك (Open Graph Meta Tags)
+app.get('/share', (req, res) => {
+    const name = req.query.name || 'متابع';
+    const result = req.query.result || 'نتيجة الاختبار';
+    const bloggerUrl = req.query.redirect || 'https://your-blogger-site.blogspot.com';
 
-server.keepAliveTimeout = 120 * 1000;
-server.headersTimeout = 120 * 1000;
+    const protocol = req.headers['x-forwarded-proto'] || 'https';
+    const host = req.get('host');
+    const imageUrl = `${protocol}://${host}/generate-image?name=${encodeURIComponent(name)}&result=${encodeURIComponent(result)}`;
 
-const html = `
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Hello from Render!</title>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-    <script>
-      setTimeout(() => {
-        confetti({
-          particleCount: 100,
-          spread: 70,
-          origin: { y: 0.6 },
-          disableForReducedMotion: true
-        });
-      }, 500);
-    </script>
-    <style>
-      @import url("https://p.typekit.net/p.css?s=1&k=vnd5zic&ht=tk&f=39475.39476.39477.39478.39479.39480.39481.39482&a=18673890&app=typekit&e=css");
-      @font-face {
-        font-family: "neo-sans";
-        src: url("https://use.typekit.net/af/00ac0a/00000000000000003b9b2033/27/l?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n7&v=3") format("woff2"), url("https://use.typekit.net/af/00ac0a/00000000000000003b9b2033/27/d?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n7&v=3") format("woff"), url("https://use.typekit.net/af/00ac0a/00000000000000003b9b2033/27/a?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n7&v=3") format("opentype");
-        font-style: normal;
-        font-weight: 700;
-      }
-      html {
-        font-family: neo-sans;
-        font-weight: 700;
-        font-size: calc(62rem / 16);
-      }
-      body {
-        background: white;
-      }
-      section {
-        border-radius: 1em;
-        padding: 1em;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        margin-right: -50%;
-        transform: translate(-50%, -50%);
-      }
-    </style>
-  </head>
-  <body>
-    <section>
-      Hello from Render!
-    </section>
-  </body>
-</html>
-`
+    res.send(`
+        <!DOCTYPE html>
+        <html lang="ar" dir="rtl">
+        <head>
+            <meta charset="UTF-8">
+            <meta property="og:title" content="اختبار نسبة الزواج - نتيجة ${name}" />
+            <meta property="og:description" content="نتيجة الاختبار: ${result}" />
+            <meta property="og:image" content="${imageUrl}" />
+            <meta property="og:image:width" content="1200" />
+            <meta property="og:image:height" content="630" />
+            <meta property="og:type" content="website" />
+        </head>
+        <body>
+            <script>
+                window.location.href = "${bloggerUrl}";
+            </script>
+        </body>
+        </html>
+    `);
+});
+
+// مسار إنتاج الصورة الديناميكية (SVG)
+app.get('/generate-image', (req, res) => {
+    const name = req.query.name || '';
+    const result = req.query.result || '';
+
+    const svgImage = `
+    <svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+        <rect width="100%" height="100%" fill="#1e293b"/>
+        <circle cx="600" cy="315" r="280" fill="#0f172a" opacity="0.5"/>
+        <text x="50%" y="30%" dominant-baseline="middle" text-anchor="middle" fill="#f59e0b" font-size="50" font-family="sans-serif" font-weight="bold">اختبار نسبة الزواج 💍</text>
+        <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#ffffff" font-size="60" font-family="sans-serif" font-weight="bold">${name}</text>
+        <text x="50%" y="70%" dominant-baseline="middle" text-anchor="middle" fill="#38bdf8" font-size="45" font-family="sans-serif">${result}</text>
+    </svg>`;
+
+    res.setHeader('Content-Type', 'image/svg+xml');
+    res.send(svgImage);
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
