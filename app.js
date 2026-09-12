@@ -1,58 +1,79 @@
 const express = require('express');
+const path = require('path');
 const app = express();
 
-// الصفحة الرئيسية
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.get('/', (req, res) => {
-    res.send('Marriage Quiz Dynamic Image Server is Running!');
+    res.send(`
+        <!DOCTYPE html>
+        <html lang="ar" dir="rtl">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>اختبار توقعات الزواج</title>
+            <meta property="og:title" content="اختبار توقعات الزواج - اكتشف مستقبلك العاطفي!">
+            <meta property="og:description" content="أجب عن الأسئلة واكتشف متى وكيف ستتزوج!">
+            <meta property="og:image" content="https://images.unsplash.com/photo-1519741497674-611481863552?w=1200">
+            <style>
+                body { font-family: Tahoma, sans-serif; background: #fdfbf7; text-align: center; padding: 50px; }
+                .card { background: white; max-width: 500px; margin: auto; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+                button { background: #ff4757; color: white; border: none; padding: 12px 25px; font-size: 16px; border-radius: 8px; cursor: pointer; margin-top: 20px; }
+                button:hover { background: #ff6b81; }
+            </style>
+        </head>
+        <body>
+            <div class="card">
+                <h1>💍 اختبار توقعات الزواج</h1>
+                <p>اضغط أدناه لاكتشاف متى ستتزوج وما هي صفات شريك حياتك المستقبلية!</p>
+                <form action="/result" method="POST">
+                    <button type="submit">ابدأ الاختبار الآن</button>
+                </form>
+            </div>
+        </body>
+        </html>
+    `);
 });
 
-// مسار مشاركة فيسبوك (Open Graph Meta Tags)
-app.get('/share', (req, res) => {
-    const name = req.query.name || 'متابع';
-    const result = req.query.result || 'نتيجة الاختبار';
-    const bloggerUrl = req.query.redirect || 'https://your-blogger-site.blogspot.com';
-
-    const protocol = req.headers['x-forwarded-proto'] || 'https';
-    const host = req.get('host');
-    const imageUrl = `${protocol}://${host}/generate-image?name=${encodeURIComponent(name)}&result=${encodeURIComponent(result)}`;
+app.post('/result', (req, res) => {
+    const results = [
+        { title: "ستتزوج خلال عامين من شخص يحب السفر والمغامرات! ✈️", image: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=1200" },
+        { title: "شريك حياتك القادم سيكون شخصاً هادئاً ويفهمك من نظرة! ☕", image: "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=1200" },
+        { title: "الزواج قادم في طريقك قريباً جداً وستقيم حفل زفاف أسطوري! 🌟", image: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=1200" }
+    ];
+    
+    const randomResult = results[Math.floor(Math.random() * results.length)];
 
     res.send(`
         <!DOCTYPE html>
         <html lang="ar" dir="rtl">
         <head>
             <meta charset="UTF-8">
-            <meta property="og:title" content="اختبار نسبة الزواج - نتيجة ${name}" />
-            <meta property="og:description" content="نتيجة الاختبار: ${result}" />
-            <meta property="og:image" content="${imageUrl}" />
-            <meta property="og:image:width" content="1200" />
-            <meta property="og:image:height" content="630" />
-            <meta property="og:type" content="website" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>نتيجة اختبار الزواج</title>
+            <meta property="og:title" content="نتيجة اختبار الزواج الخاصة بي: ${randomResult.title}">
+            <meta property="og:description" content="اكتشف توقعات زواجك أنت أيضاً عبر هذا الاختبار الممتع!">
+            <meta property="og:image" content="${randomResult.image}">
+            <style>
+                body { font-family: Tahoma, sans-serif; background: #fdfbf7; text-align: center; padding: 50px; }
+                .card { background: white; max-width: 500px; margin: auto; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+                img { max-width: 100%; border-radius: 10px; margin-top: 15px; }
+                a { display: inline-block; background: #2ed573; color: white; text-decoration: none; padding: 12px 25px; font-size: 16px; border-radius: 8px; margin-top: 20px; }
+                a:hover { background: #26af5f; }
+            </style>
         </head>
         <body>
-            <script>
-                window.location.href = "${bloggerUrl}";
-            </script>
+            <div class="card">
+                <h2>🎉 النتيجة الخاصة بك:</h2>
+                <p style="font-size: 18px; font-weight: bold; color: #333;">${randomResult.title}</p>
+                <img src="${randomResult.image}" alt="نتيجة الزواج">
+                <br>
+                <a href="/">إعادة الاختبار</a>
+            </div>
         </body>
         </html>
     `);
-});
-
-// مسار إنتاج الصورة الديناميكية (SVG)
-app.get('/generate-image', (req, res) => {
-    const name = req.query.name || '';
-    const result = req.query.result || '';
-
-    const svgImage = `
-    <svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
-        <rect width="100%" height="100%" fill="#1e293b"/>
-        <circle cx="600" cy="315" r="280" fill="#0f172a" opacity="0.5"/>
-        <text x="50%" y="30%" dominant-baseline="middle" text-anchor="middle" fill="#f59e0b" font-size="50" font-family="sans-serif" font-weight="bold">اختبار نسبة الزواج 💍</text>
-        <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#ffffff" font-size="60" font-family="sans-serif" font-weight="bold">${name}</text>
-        <text x="50%" y="70%" dominant-baseline="middle" text-anchor="middle" fill="#38bdf8" font-size="45" font-family="sans-serif">${result}</text>
-    </svg>`;
-
-    res.setHeader('Content-Type', 'image/svg+xml');
-    res.send(svgImage);
 });
 
 const PORT = process.env.PORT || 3000;
