@@ -50,19 +50,19 @@ app.post('/result', (req, res) => {
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>نتيجة اختبار الزواج</title>
+            <!-- استدعاء مكتبة الأيقونات الحقيقية FontAwesome -->
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
             <style>
                 body { font-family: Tahoma, sans-serif; background: #fdfbf7; text-align: center; padding: 20px; margin: 0; }
                 .card { background: white; max-width: 500px; margin: auto; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
                 img { max-width: 100%; border-radius: 10px; margin-top: 10px; }
                 
-                /* زر إعادة الاختبار الرئيسي */
                 .retry-btn { display: block; width: 100%; background: #ff4757; color: white; text-decoration: none; padding: 12px; font-size: 16px; border-radius: 8px; margin-top: 15px; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.1); box-sizing: border-box; }
                 .retry-btn:hover { background: #ff6b81; }
 
                 .share-title { font-size: 14px; margin: 20px 0 10px 0; color: #555; font-weight: bold; border-top: 1px solid #eee; padding-top: 15px; }
                 
-                /* حاوية أيقونات المشاركة بجانب بعضها */
-                .social-icons { display: flex; justify-content: center; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+                .social-icons { display: flex; justify-content: center; gap: 12px; margin-top: 10px; flex-wrap: wrap; }
                 .social-icon { display: flex; align-items: center; justify-content: center; width: 45px; height: 45px; border-radius: 50%; color: white; text-decoration: none; font-size: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.15); transition: transform 0.2s; }
                 .social-icon:hover { transform: scale(1.1); }
                 
@@ -79,18 +79,16 @@ app.post('/result', (req, res) => {
                 <p style="font-size: 17px; font-weight: bold; color: #222;">${randomResult.title}</p>
                 <img src="${randomResult.image}" alt="نتيجة الزواج">
                 
-                <!-- زر إعادة الاختبار كبير وبارز -->
                 <a class="retry-btn" href="/">🔄 إعادة الاختبار من جديد</a>
                 
                 <div class="share-title">شارك نتيجتك مع أصدقائك عبر:</div>
                 
-                <!-- أيقونات المشاركة المصغرة بجانب بعضها -->
                 <div class="social-icons">
-                    <a class="social-icon whatsapp" href="https://api.whatsapp.com/send?text=${shareText}%20${shareUrl}" target="_blank" title="واتساب">💬</a>
-                    <a class="social-icon facebook" href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}" target="_blank" title="فيسبوك">📘</a>
-                    <a class="social-icon twitter" href="https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}" target="_blank" title="إكس">🅧</a>
-                    <a class="social-icon instagram" href="https://www.instagram.com/" target="_blank" title="إنستجرام">📸</a>
-                    <a class="social-icon tiktok" href="https://www.tiktok.com/" target="_blank" title="تيك توك">🎵</a>
+                    <a class="social-icon whatsapp" href="https://api.whatsapp.com/send?text=${shareText}%20${shareUrl}" target="_blank" title="واتساب"><i class="fab fa-whatsapp"></i></a>
+                    <a class="social-icon facebook" href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}" target="_blank" title="فيسبوك"><i class="fab fa-facebook-f"></i></a>
+                    <a class="social-icon twitter" href="https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}" target="_blank" title="إكس"><i class="fab fa-x-twitter"></i></a>
+                    <a class="social-icon instagram" href="https://www.instagram.com/" target="_blank" title="إنستجرام"><i class="fab fa-instagram"></i></a>
+                    <a class="social-icon tiktok" href="https://www.tiktok.com/" target="_blank" title="تيك توك"><i class="fab fa-tiktok"></i></a>
                 </div>
             </div>
         </body>
