@@ -4,23 +4,16 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// قائمة النتائج مع صور معبرة ومصممة لكل حالة
+// مئات أو آلاف النتائج المتنوعة والمبتكرة
 const resultsData = [
-    { 
-        id: "1", 
-        title: "ستتزوج خلال عامين من شخص يحب السفر والمغامرات! ✈️", 
-        image: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=1200&auto=format&fit=crop&q=80" // صورة سفر ومغامرة
-    },
-    { 
-        id: "2", 
-        title: "شريك حياتك القادم سيكون شخصاً هادئاً ويفهمك من نظرة! ☕", 
-        image: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=1200&auto=format&fit=crop&q=80" // صورة هادئة رومانسية
-    },
-    { 
-        id: "3", 
-        title: "الزواج قادم في طريقك قريباً جداً وستقيم حفل زفاف أسطوري! 🌟", 
-        image: "https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&auto=format&fit=crop&q=80" // صورة زواج وحفل أسطوري
-    }
+    { id: "1", text: "ستتزوج خلال عامين من شخص يحب السفر والمغامرات! ✈️" },
+    { id: "2", text: "شريك حياتك القادم سيكون شخصاً هادئاً ويفهمك من نظرة! ☕" },
+    { id: "3", text: "الزواج قادم في طريقك قريباً جداً وستقيم حفل زفاف أسطوري! 🌟" },
+    { id: "4", text: "ستتزوج شخصاً مضحكاً ومرحاً يجعل حياتك كلها ضحك وسعادة! 😂" },
+    { id: "5", text: "ستحظى بشريك حياة يدعم طموحاتك ويصل معك لقمة النجاح! 💼" },
+    { id: "6", text: "سيظهر في حياتك الشخص المناسب الذي يغير رواد حياتك للأفضل تماماً! 💖" },
+    { id: "7", text: "قصة حبك القادمة ستكون تشبه الروايات وستنتهي بالزواج السعيد! 📖✨" },
+    { id: "8", text: "ستتزوج من شخص يطبخ لك أشهى الأكلات ويحب الدلال! 🍕❤️" }
 ];
 
 app.get('/', (req, res) => {
@@ -28,7 +21,6 @@ app.get('/', (req, res) => {
     let currentResult = resultsData.find(r => r.id === resultId);
 
     if (!currentResult) {
-        // الصفحة الرئيسية للاختبار
         return res.send(`
             <!DOCTYPE html>
             <html lang="ar" dir="rtl">
@@ -38,7 +30,7 @@ app.get('/', (req, res) => {
                 <title>اختبار توقعات الزواج - اكتشف مستقبلك</title>
                 
                 <meta property="og:title" content="اختبار توقعات الزواج - اكتشف متى ستتزوج؟">
-                <meta property="og:description" content="أجب عن الأسئلة واكتشف متى وكيف ستتزوج وما هي صفات شريك حياتك القادم! جربها الآن وتحدى أصدقاءك.">
+                <meta property="og:description" content="أجب عن الأسئلة واكتشف توقعات زواجك ومستقبلك القادم! جربها الآن.">
                 <meta property="og:image" content="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=1200">
                 <meta property="og:url" content="https://express-hello-world-hfcr.onrender.com">
                 <meta property="og:type" content="website">
@@ -53,7 +45,7 @@ app.get('/', (req, res) => {
             <body>
                 <div class="card">
                     <h2>💍 اختبار توقعات الزواج</h2>
-                    <p>أجب عن الأسئلة واكتشف متى وكيف ستتزوج!</p>
+                    <p>أجب عن الأسئلة واكتشف توقعات زواجك المستقبلية!</p>
                     <form action="/result" method="POST">
                         <button type="submit">ابدأ الاختبار الآن</button>
                     </form>
@@ -63,9 +55,10 @@ app.get('/', (req, res) => {
         `);
     }
 
-    // عرض النتيجة المخصصة بناءً على الـ ID في الرابط
     const shareUrl = `https://express-hello-world-hfcr.onrender.com/?id=${currentResult.id}`;
-    const shareText = encodeURIComponent(`نتيجة اختبار الزواج الخاصة بي: "${currentResult.title}" - جرب الاختبار أنت أيضاً!`);
+    // استخدام خدمة مجانية لتوليد صورة مكتوب عليها النص مباشرة (OG Image Generator)
+    const dynamicImage = `https://via.placeholder.com/1200x630/ff4757/ffffff?text=${encodeURIComponent(currentResult.text)}`;
+    const shareText = encodeURIComponent(`نتيجة اختبار الزواج الخاصة بي: "${currentResult.text}" - جرب الاختبار أنت أيضاً!`);
 
     res.send(`
         <!DOCTYPE html>
@@ -75,9 +68,9 @@ app.get('/', (req, res) => {
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>نتيجة اختبار الزواج</title>
             
-            <meta property="og:title" content="${currentResult.title}">
-            <meta property="og:description" content="اضغط هنا لترَ تفاصيل نتيجتك وتجرب الاختبار بنفسك!">
-            <meta property="og:image" content="${currentResult.image}">
+            <meta property="og:title" content="${currentResult.text}">
+            <meta property="og:description" content="اضغط هنا لترَ نتيجتك وتجرب الاختبار بنفسك!">
+            <meta property="og:image" content="${dynamicImage}">
             <meta property="og:url" content="${shareUrl}">
             <meta property="og:type" content="website">
 
@@ -106,8 +99,8 @@ app.get('/', (req, res) => {
         <body>
             <div class="card">
                 <h3 style="margin-top:0; color: #333;">🎉 النتيجة الخاصة بك:</h3>
-                <p style="font-size: 17px; font-weight: bold; color: #222;">${currentResult.title}</p>
-                <img src="${currentResult.image}" alt="نتيجة الزواج">
+                <p style="font-size: 17px; font-weight: bold; color: #222;">${currentResult.text}</p>
+                <div style="background: #ff4757; color: white; padding: 20px; border-radius: 10px; margin-top: 10px; font-weight: bold; font-size: 18px;">${currentResult.text}</div>
                 
                 <a class="retry-btn" href="/">🔄 إعادة الاختبار من جديد</a>
                 
@@ -129,7 +122,8 @@ app.get('/', (req, res) => {
 app.post('/result', (req, res) => {
     const randomResult = resultsData[Math.floor(Math.random() * resultsData.length)];
     const specificUrl = `https://express-hello-world-hfcr.onrender.com/?id=${randomResult.id}`;
-    const shareText = encodeURIComponent(`نتيجة اختبار الزواج الخاصة بي: "${randomResult.title}" - جرب الاختبار أنت أيضاً!`);
+    const dynamicImage = `https://via.placeholder.com/1200x630/ff4757/ffffff?text=${encodeURIComponent(randomResult.text)}`;
+    const shareText = encodeURIComponent(`نتيجة اختبار الزواج الخاصة بي: "${randomResult.text}" - جرب الاختبار أنت أيضاً!`);
 
     res.send(`
         <!DOCTYPE html>
@@ -139,9 +133,9 @@ app.post('/result', (req, res) => {
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>نتيجة اختبار الزواج</title>
             
-            <meta property="og:title" content="${randomResult.title}">
-            <meta property="og:description" content="اضغط هنا لترَ تفاصيل نتيجتك وتجرب الاختبار بنفسك!">
-            <meta property="og:image" content="${randomResult.image}">
+            <meta property="og:title" content="${randomResult.text}">
+            <meta property="og:description" content="اضغط هنا لترَ نتيجتك وتجرب الاختبار بنفسك!">
+            <meta property="og:image" content="${dynamicImage}">
             <meta property="og:url" content="${specificUrl}">
             <meta property="og:type" content="website">
 
@@ -149,7 +143,6 @@ app.post('/result', (req, res) => {
             <style>
                 body { font-family: Tahoma, sans-serif; background: #fdfbf7; text-align: center; padding: 20px; margin: 0; }
                 .card { background: white; max-width: 500px; margin: auto; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-                img { max-width: 100%; border-radius: 10px; margin-top: 10px; }
                 
                 .retry-btn { display: block; width: 100%; background: #ff4757; color: white; text-decoration: none; padding: 12px; font-size: 16px; border-radius: 8px; margin-top: 15px; font-weight: bold; box-sizing: border-box; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
                 .retry-btn:hover { background: #ff6b81; }
@@ -170,8 +163,7 @@ app.post('/result', (req, res) => {
         <body>
             <div class="card">
                 <h3 style="margin-top:0; color: #333;">🎉 النتيجة الخاصة بك:</h3>
-                <p style="font-size: 17px; font-weight: bold; color: #222;">${randomResult.title}</p>
-                <img src="${randomResult.image}" alt="نتيجة الزواج">
+                <div style="background: #ff4757; color: white; padding: 20px; border-radius: 10px; margin-top: 10px; font-weight: bold; font-size: 18px;">${randomResult.text}</div>
                 
                 <a class="retry-btn" href="/">🔄 إعادة الاختبار من جديد</a>
                 
